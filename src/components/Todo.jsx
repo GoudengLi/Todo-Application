@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Popup from "reactjs-popup"; 
 import "reactjs-popup/dist/index.css"; 
 import Webcam from "react-webcam"; 
-import { addPhoto, GetPhotoSrc } from "../db.jsx"; 
+import { addPhoto,deletePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -11,8 +11,8 @@ function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
   const editButtonRef = useRef(null);
-  
-
+  const [returnToMain, setReturnToMain] = useState(false);
+  const [imgSrc, setImgSrc] = useState(null);
 
   function handleChange(e) {
     setNewName(e.target.value);
@@ -58,6 +58,8 @@ function Todo(props) {
   </form>
 );
 const viewTemplate = (
+
+  
   <div className="stack-small">
   <div className="c-cb">
   <input
@@ -96,11 +98,15 @@ const viewTemplate = (
   modal
   >
   <div>
-  <WebcamCapture id={props.id} photoedTask={props.photoedTask} />
+  <WebcamCapture id={props.id} photoedTask={props.photoedTask} 
+  imgSrc={imgSrc} setImgSrc={setImgSrc}/>
   </div>
   </Popup>
+  
   <Popup 
+  
   trigger={
+    
   <button type="button" className="btn">
   {" "}
   View Photo{" "}
@@ -128,9 +134,9 @@ return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
 
   }
 
-  const WebcamCapture = (props) => {
+const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
     const webcamRef = useRef(null);
-    const [imgSrc, setImgSrc] = useState(null);
+    
     const [imgId, setImgId] = useState(null);
     const [photoSave, setPhotoSave] = useState(false);
   
@@ -158,20 +164,19 @@ return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
     setImgId(id);
     setPhotoSave(true);
     };
-    const [returnToMain, setReturnToMain] = useState(false); 
 
     const cancelPhoto = (id, imgSrc) => {
       if (!imgSrc) {
-        console.log("imgSrc is empty");
+       alert("img is empty");
         return;
       }else{
-        console.log("cancelPhoto", imgSrc.length, id);
+        alert("cancelPhoto", imgSrc.length, id);
+        setImgSrc(null);
       }
       
-      setReturnToMain(true);
-      if (returnToMain) {
-        return <Redirect to="/" />;
-      }
+   
+
+      
     };
     return (
     <>
@@ -199,29 +204,67 @@ return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
     <button 
     type="button"
     className="btn todo-cancel"
-    onClick={() => cancelPhoto(props.id, imgSrc)}>
+    onClick={() => cancelPhoto(props.id, imgSrc)
+    
+    }>
     Cancel
     </button>
     </div>
     </>);
    };
 
+
    const ViewPhoto = (props) => {
- 
     const photoSrc = GetPhotoSrc(props.id);
+    const [currentPhotoSrc, setPhotoSrc] = useState(null);
+    useEffect(() => {
+      getPhotoSrcFromDB(props.id)
+        .then(imgSrc => {
+          if (imgSrc !== null) {
+            setPhotoSrc(imgSrc);
+          } else {
+            setPhotoSrc(null);
+            console.log("Photo source not found.");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    }, [props.id]);
+  
+    const handleDeletePhoto = () => {
+      deletePhoto(props.id);
+    };
+    
+
+
+    
+
+    
+    if (currentPhotoSrc==null) {
+      return (
+        <div style={{ margin: 'auto' }}>
+          <p>Photo not found</p>
+        </div>
+      );
+    }else{ return (
+      <div style={{ margin: 'auto' }}>
+          <>
+            <img src={photoSrc} alt={props.name} />
+            <button
+              type="button"
+              className="btn btn__danger"
+              onClick={handleDeletePhoto}
+            >
+              Delete Photo
+            </button>
+          </>
+        
+      </div>
+    );}
 
    
-    
-    return (
-      
-    <>
-    <div>
-
-    <img src={photoSrc} alt={props.name} />
-    </div>
-    </>
-    );
-   };
+  };
   
   export default Todo;
   
