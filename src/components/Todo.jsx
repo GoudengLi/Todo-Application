@@ -2,9 +2,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Popup from "reactjs-popup"; 
 import "reactjs-popup/dist/index.css"; 
 import Webcam from "react-webcam"; 
-import { addPhoto,deletePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { addPhoto,deletePhoto,updatePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
+
 
 
 function Todo(props) {
@@ -13,6 +12,7 @@ function Todo(props) {
   const editButtonRef = useRef(null);
   const [returnToMain, setReturnToMain] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   function handleChange(e) {
     setNewName(e.target.value);
@@ -57,6 +57,43 @@ function Todo(props) {
     </div>
   </form>
 );
+
+const handleSMSClick = () => {
+ 
+  const contact = prompt("send to:");
+
+  
+  if (!contact) return;
+
+
+ 
+  addCoordinate(props.latitude, props.longitude, true);
+};
+
+const handleFileChange = (event) => {
+  setSelectedFile(event.target.files[0]);
+};
+
+const handleUpdatePhoto = async (id) => {
+  if (selectedFile) {
+    try {
+      // 使用FileReader读取文件并将其转换为Base64编码字符串
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onload = async () => {
+        const base64Img = reader.result;
+
+        // 调用更新照片函数，传递Base64编码的图片字符串
+        await updatePhoto(id, base64Img);
+        console.log(`Photo with ID ${id} successfully updated.`);
+      };
+    } catch (error) {
+      console.error(`Failed to update photo with ID ${id}: ${error}`);
+    }
+  } else {
+    console.error("No file selected.");
+  }
+};
 const viewTemplate = (
 
   
@@ -73,7 +110,7 @@ const viewTemplate = (
 
   <a href={props.location.mapURL}>(map)</a>
   &nbsp; | &nbsp;
-  <a href={props.location.smsURL}>(sms)</a> 
+  <a href={props.location.smsURL}>(sms)</a>
  
   </label>
   </div>
@@ -126,6 +163,15 @@ const viewTemplate = (
   Delete <span className="visually-hidden">{props.name}</span>
   </button>
   </div>
+
+  <div>
+     
+      <input type="file" onChange={handleFileChange} />
+
+    
+      <button onClick={() => handleUpdatePhoto(props.id)}>Update Photo</button>
+    </div>
+
   </div>
   );
 
@@ -236,9 +282,8 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
       deletePhoto(props.id);
     };
     
-
-
-    
+   
+  
 
     
     if (currentPhotoSrc==null) {
@@ -248,18 +293,17 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
         </div>
       );
     }else{ return (
-      <div style={{ margin: 'auto' }}>
-          <>
-            <img src={photoSrc} alt={props.name} />
-            <button
-              type="button"
-              className="btn btn__danger"
-              onClick={handleDeletePhoto}
-            >
-              Delete Photo
-            </button>
-          </>
-        
+      <div className="photo-container">
+        <>
+        <img src={photoSrc} alt={props.name} className="photo" />
+          <button
+            type="button"
+            className="btn btn__danger"
+            onClick={handleDeletePhoto}
+          >
+            Delete Photo
+          </button>
+        </>
       </div>
     );}
 
