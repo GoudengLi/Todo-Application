@@ -3,7 +3,8 @@ import { nanoid } from "nanoid";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
-
+import { Routes, Route } from 'react-router-dom';
+import GoogleMap from './GoogleMap';
 
 
 const FILTER_MAP = {
@@ -16,6 +17,8 @@ const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function App(props) {
 
+  
+ 
   const listHeadingRef = useRef(null);
 
   const geoFindMe = () => {
@@ -177,8 +180,16 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     >
     {taskList}
     </ul>
+    <div className="App">
+      <h1>Google Map Integration</h1>
+      <GoogleMap />
     </div>
+    </div>
+    
    );
+
+ 
+
   }
 
 export default App;

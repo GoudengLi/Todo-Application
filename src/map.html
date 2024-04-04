@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>带有天气的简单标记</title>
+    <!-- 必须有回调参数，因此我们使用console.debug作为无操作函数 -->
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHFbUw9TjQzw8vZY80ZXrGeyx3FkYRT2M&callback=console.debug&libraries=maps,marker&v=beta"></script>
+    <style>
+      /* 始终明确设置地图高度以定义包含地图的div元素的大小 */
+      gmp-map {
+        height: 100%;
+      }
+
+      /* 可选: 使示例页面填充窗口 */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #weather-info {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="weather-info">qnm</div>
+    <gmp-map id="map" center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
+      <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="我的位置"></gmp-advanced-marker>
+    </gmp-map>
+
+    <script>
+      function initMap() {
+        // 创建地图对象并指定用于显示的DOM元素。
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 40.12150192260742, lng: -100.45039367675781},
+          zoom: 4
+        });
+
+        // 调用函数获取天气数据
+        getWeather(map.center);
+      }
+
+      function getWeather(location) {
+        var apiKey = 'AIzaSyCHFbUw9TjQzw8vZY80ZXrGeyx3FkYRT2M';
+        var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + location.lat + '&lon=' + location.lng + '&appid=' + apiKey;
+
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            // 提取相关的天气信息
+            var weatherDescription = data.weather[0].description;
+            var temperature = data.main.temp - 273.15; // 温度以开尔文为单位，转换为摄氏度
+            var weatherInfo = "天气：" + weatherDescription + "<br>温度：" + temperature.toFixed(2) + "°C";
+
+            // 在页面上显示天气信息
+            document.getElementById('weather-info').innerHTML = weatherInfo;
+          })
+          .catch(error => console.error('Error fetching weather data:', error));
+      }
+    </script>
+  </body>
+</html>

@@ -80,6 +80,7 @@ body {
   cursor: pointer;
   padding: 0.8rem 1rem 0.7rem;
   text-transform: capitalize;
+  width: auto;
 }
 .btn.toggle-btn {
   border-color: #d3d3d3;
@@ -293,13 +294,16 @@ body {
 
 .photo-container {
   margin: auto;
-  width: 90%; 
-  max-width: 600px; 
-  height: auto; 
+  width: 100%; 
+  max-width: 1000px; 
+  height: auto;
+  width: auto;
+
 }
 .photo {
   max-width: 100%; 
   max-height: 100%; 
+  margin:auto
 }
 
 .c-cb > input[type="checkbox"]:checked + label::after {

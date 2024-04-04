@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css"; 
 import Webcam from "react-webcam"; 
 import { addPhoto,deletePhoto,updatePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
-
+import React from 'react';
 
 
 function Todo(props) {
@@ -58,17 +58,6 @@ function Todo(props) {
   </form>
 );
 
-const handleSMSClick = () => {
- 
-  const contact = prompt("send to:");
-
-  
-  if (!contact) return;
-
-
- 
-  addCoordinate(props.latitude, props.longitude, true);
-};
 
 const handleFileChange = (event) => {
   setSelectedFile(event.target.files[0]);
@@ -77,13 +66,13 @@ const handleFileChange = (event) => {
 const handleUpdatePhoto = async (id) => {
   if (selectedFile) {
     try {
-      // 使用FileReader读取文件并将其转换为Base64编码字符串
+      // Using FileReader to read a file and convert it to a Base64 encoded string.
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = async () => {
         const base64Img = reader.result;
 
-        // 调用更新照片函数，传递Base64编码的图片字符串
+        // Invoke the update photo function and pass the Base64 encoded image string.
         await updatePhoto(id, base64Img);
         console.log(`Photo with ID ${id} successfully updated.`);
       };
@@ -134,10 +123,10 @@ const viewTemplate = (
   }
   modal
   >
-  <div>
+ <div style={{ width: '100%' }}>
   <WebcamCapture id={props.id} photoedTask={props.photoedTask} 
-  imgSrc={imgSrc} setImgSrc={setImgSrc}/>
-  </div>
+    imgSrc={imgSrc} setImgSrc={setImgSrc}/>
+</div>
   </Popup>
   
   <Popup 
@@ -165,12 +154,13 @@ const viewTemplate = (
   </div>
 
   <div>
-     
+  {imgSrc ? (
+    <React.Fragment>
       <input type="file" onChange={handleFileChange} />
-
-    
       <button onClick={() => handleUpdatePhoto(props.id)}>Update Photo</button>
-    </div>
+    </React.Fragment>
+  ) : null}
+</div>
 
   </div>
   );
@@ -296,6 +286,7 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
       <div className="photo-container">
         <>
         <img src={photoSrc} alt={props.name} className="photo" />
+        <br />
           <button
             type="button"
             className="btn btn__danger"
@@ -306,6 +297,10 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
         </>
       </div>
     );}
+
+
+
+    
 
    
   };
