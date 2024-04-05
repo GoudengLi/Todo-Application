@@ -127,6 +127,9 @@ useEffect(() => {
 const refreshPage = () => {
   window.location.reload();
 };
+
+
+
 const viewTemplate = (
  
   
@@ -144,16 +147,21 @@ const viewTemplate = (
   <div className="App">
   {props.name} &nbsp;&nbsp; <a href={props.location.smsURL}>(sms)</a>&nbsp;&nbsp;  <button onClick={refreshPage}>refresh</button>&nbsp;&nbsp;
   <Popup
-  trigger={<button onClick={togglePopup}>(map)</button>}
-  modal
-  open={showPopup}
-  onClose={togglePopup}
-  className="custom-popup" 
->
-  <div>
-    <GoogleMap initialCoordinates={initialCoordinates} />
-  </div>
-</Popup>
+        trigger={<button onClick={togglePopup}>(map)</button>}
+        modal
+        open={showPopup}
+        onClose={togglePopup}
+        className="custom-popup"
+      >
+        <div>
+          {!initialCoordinates && (
+            <p>Refresh the page to access the map</p>
+          )}
+          {initialCoordinates && (
+            <GoogleMap initialCoordinates={initialCoordinates} />
+          )}
+        </div>
+      </Popup>
     </div>
  
  
