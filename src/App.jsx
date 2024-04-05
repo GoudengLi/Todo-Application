@@ -26,6 +26,7 @@ function App(props) {
     } else {
     console.log("Locating…");
     navigator.geolocation.getCurrentPosition(success, error);
+    window.location.reload();
     }
     };
     const success = (position) => {
