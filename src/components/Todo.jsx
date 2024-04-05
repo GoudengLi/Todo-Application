@@ -90,6 +90,12 @@ const handleUpdatePhoto = async (id) => {
 const [showPopup, setShowPopup] = useState(false);
 const togglePopup = () => {
   setShowPopup(!showPopup);
+  navigator.geolocation.getCurrentPosition((position) => {
+
+    console.log('用户位置信息：', position.coords.latitude, position.coords.longitude);
+  }, (error) => {
+    console.error('获取位置信息失败：', error.message);
+  });
 };
 
 
