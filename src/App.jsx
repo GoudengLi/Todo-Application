@@ -153,7 +153,6 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     };
     setLastInsertedId(id);
     setTasks([...tasks, newTask]);
-    window.location.reload();
     }
 
 
