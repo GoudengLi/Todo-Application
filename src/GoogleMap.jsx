@@ -50,6 +50,7 @@ const GoogleMap = ({ initialCoordinates }) => {
   useEffect(() => {
     window.initMap = initMap; // Expose initMap function to global scope
     window.onload = initMap; // Call initMap when the entire page is loaded
+    
     if (!window.google) {
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCHFbUw9TjQzw8vZY80ZXrGeyx3FkYRT2M&callback=initMap&libraries=places`;
