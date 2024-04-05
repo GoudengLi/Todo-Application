@@ -22,13 +22,23 @@ function App(props) {
 
   const geoFindMe = () => {
     if (!navigator.geolocation) {
-    console.log("Geolocation is not supported by your browser");
-    } else {
-    console.log("Locating…");
-    navigator.geolocation.getCurrentPosition(success, error);
-    window.location.reload();
+      console.log("Geolocation is not supported by your browser");
+  } else {
+     
+      if (!localStorage.getItem('geoPermission')) {
+          var permission = confirm("Please agree to grant location access to use the map. Click OK to proceed, click Cancel to stop receiving this prompt.");
+          if (permission) {
+              localStorage.setItem('geoPermission', 'granted');
+          } else {
+              localStorage.setItem('geoPermission', 'denied');
+              return; 
+          }
+      }
     }
-    };
+  
+      console.log("Locating…");
+      navigator.geolocation.getCurrentPosition(success, error);
+  }
     const success = (position) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
