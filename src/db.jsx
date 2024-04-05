@@ -3,7 +3,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 
 // create dexie
 export const db = new Dexie("todo-photos");
-db.version(4).stores({
+db.version(5).stores({
   photos: "id",
   locations: "id"
 });
