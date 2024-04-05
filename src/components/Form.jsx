@@ -24,7 +24,6 @@ function Form(props) {
         setAddition(true);
         props.addTask(name);
         setName("");
-        window.location.reload();
         }
     return (
         <form onSubmit={handleSubmit}>
