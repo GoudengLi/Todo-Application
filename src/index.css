@@ -305,7 +305,10 @@ body {
   max-height: 100%; 
   margin:auto
 }
-
+.custom-popup {
+  width: 80%; 
+  max-width: 400px;
+}
 .c-cb > input[type="checkbox"]:checked + label::after {
   opacity: 1;
 }

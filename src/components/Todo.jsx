@@ -92,14 +92,7 @@ const togglePopup = () => {
   setShowPopup(!showPopup);
 };
 
-function getCoordinatesById(id) {
-  const foundItem = DATA.find(item => item.id === id);
-  if (foundItem) {
-      return foundItem.location;
-  } else {
-      return "sb";
-  }
-}
+
 function getCoordinatesById(id) {
   const foundItem = DATA.find(item => item.id === id);
   if (foundItem) {
@@ -149,15 +142,16 @@ const viewTemplate = (
   <div className="App">
   {props.name} &nbsp;&nbsp; <a href={props.location.smsURL}>(sms)&nbsp;&nbsp;</a>
   <Popup
-        trigger={<button onClick={togglePopup}>(map)</button>}
-        modal
-        open={showPopup}
-        onClose={togglePopup}
-      >
-        <div>
-        <GoogleMap initialCoordinates={initialCoordinates} />
-        </div>
-      </Popup>
+  trigger={<button onClick={togglePopup}>(map)</button>}
+  modal
+  open={showPopup}
+  onClose={togglePopup}
+  className="custom-popup" // 添加自定义的CSS类名
+>
+  <div>
+    <GoogleMap initialCoordinates={initialCoordinates} />
+  </div>
+</Popup>
     </div>
  
  
@@ -274,13 +268,14 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
       
     };
     return (
+      <div style={{ maxWidth: '140%' }}>
     <>
     {!imgSrc && (
      <Webcam 
       audio={false} 
      ref={webcamRef} 
     screenshotFormat="image/jpeg" 
-  style={{ maxWidth: '150%', height: 'auto' }} // 控制大小
+  style={{ maxWidth: '100%', height: 'auto' }} 
      />
     )}
     {imgSrc && <img src={imgSrc} />}
@@ -310,7 +305,9 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
     Cancel
     </button>
     </div>
-    </>);
+   
+    </>
+    </div>);
    };
 
 
