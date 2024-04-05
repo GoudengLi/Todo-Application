@@ -16,6 +16,18 @@
         "purpose": "markable"
       },
       {
+        "src": "images/map.png",
+        "sizes": "10x10",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "images/map.png",
+        "sizes": "10x10",
+        "type": "refresh/png",
+        "purpose": "any"
+      },
+      {
         "src": "images/new_icon.png",
         "sizes": "144x144",
         "type": "image/png",

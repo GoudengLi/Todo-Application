@@ -6,6 +6,7 @@ import { addPhoto,deletePhoto,updatePhoto, GetPhotoSrc,getPhotoSrcFromDB } from 
 import React from 'react';
 import GoogleMap from '../GoogleMap.jsx';
 
+
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
@@ -145,15 +146,18 @@ const viewTemplate = (
 
 
   <div className="App">
-  {props.name} &nbsp;&nbsp; <a href={props.location.smsURL}>(sms)</a>&nbsp;&nbsp;  <button onClick={refreshPage}>refresh</button>&nbsp;&nbsp;
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+  {props.name} &nbsp;&nbsp;
+  <button onClick={refreshPage} style={{backgroundImage: 'url("images/refresh.png")', backgroundSize: 'cover', width: '30px', height: '30px'}}></button>
+  &nbsp;&nbsp;&nbsp;
   <Popup
-        trigger={<button onClick={togglePopup}>(map)</button>}
-        modal
-        open={showPopup}
-        onClose={togglePopup}
-        className="custom-popup"
-      >
-        <div>
+    trigger={<button onClick={togglePopup} style={{backgroundImage: 'url("images/map.png")', backgroundSize: 'cover', width: '30px', height: '30px'}}></button>}
+    modal
+    open={showPopup}
+    onClose={togglePopup}
+    className="custom-popup"
+  >
+   <div>
           {!initialCoordinates && (
             <p>Refresh the page to access the map</p>
           )}
@@ -162,6 +166,8 @@ const viewTemplate = (
           )}
         </div>
       </Popup>
+</div>
+       
     </div>
  
  

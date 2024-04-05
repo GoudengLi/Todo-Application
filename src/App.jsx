@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
+import './imjoking.css';
 import { nanoid } from "nanoid";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
-
-
 
 const FILTER_MAP = {
   All: () => true,
@@ -154,6 +153,28 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
 
   const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
+  const [joke, setJoke] = useState('');
+
+  const fetchJoke = async () => {
+    try {
+        const response = await fetch('https://api.chucknorris.io/jokes/random');
+        if (!response.ok) {
+            throw new Error('Failed to fetch Chuck Norris joke');
+        }
+        const data = await response.json();
+        const joke = data.value.replace(/Chuck Norris/g, 'Zhao Yi');
+        setJoke(joke);
+        setShowJoke(true);
+    } catch (error) {
+        console.error('Error fetching Chuck Norris joke:', error);
+        return null;
+    }
+};
+
+  const [showJoke, setShowJoke] = useState(false);
+  const closeJoke = () => {
+    setShowJoke(false);
+}
 
   return (
     <div className="todoapp stack-large">
@@ -170,6 +191,18 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     >
     {taskList}
     </ul>
+    <div><button id="fetchJokeButton" onClick={fetchJoke}>feel boring?</button>
+    &nbsp;&nbsp;
+    
+            {showJoke && (
+                <div id="jokeContainer">
+                   
+                    {joke && <p id="jokeText">{joke}</p>}
+                    <button id="fetchJokeButton" onClick={closeJoke}>Close</button> 
+                </div>
+                
+            )}
+        </div>
     </div>
     
    );

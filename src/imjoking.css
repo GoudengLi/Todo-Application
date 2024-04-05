@@ -1,0 +1,28 @@
+#jokeText {
+  font-style: italic; 
+  color: #333; 
+  margin-top: 10px; 
+  border: 1px solid #ccc; 
+  background-color: #f9f9f9; 
+  padding: 10px; 
+}
+  
+  #fetchJokeButton {
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    border: none; 
+    cursor: pointer; 
+    border-radius: 5px; 
+  }
+  
+  #fetchJokeButton:hover {
+    background-color: #45a049; 
+  }
+  
+  #jokeText {
+    font-style: italic; 
+    color: #333; 
+    margin-top: 10px; 
+  }
