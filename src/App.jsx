@@ -3,8 +3,7 @@ import { nanoid } from "nanoid";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
-import { Routes, Route } from 'react-router-dom';
-import GoogleMap from './GoogleMap';
+
 
 
 const FILTER_MAP = {
@@ -32,9 +31,6 @@ function App(props) {
     const success = (position) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    console.log(latitude, longitude);
-    console.log(`Latitude: ${latitude}°, Longitude: ${longitude}°`);
-    console.log(`Try here: https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`);
     locateTask(lastInsertedId, {
     latitude: latitude,
     longitude: longitude,
@@ -94,8 +90,6 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
   }
 
   function locateTask(id, location) {
-    console.log("locate Task", id, " before");
-    console.log(location, tasks);
     const locatedTaskList = tasks.map((task) => {
  
     if (id === task.id) {
@@ -104,7 +98,7 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     }
     return task;
     });
-    console.log(locatedTaskList);
+ 
     setTasks(locatedTaskList);
    }
 
@@ -159,6 +153,8 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     };
     setLastInsertedId(id);
     setTasks([...tasks, newTask]);
+
+    window.location.reload();
     }
 
 
@@ -180,10 +176,6 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     >
     {taskList}
     </ul>
-    <div className="App">
-      <h1>Google Map Integration</h1>
-      <GoogleMap />
-    </div>
     </div>
     
    );

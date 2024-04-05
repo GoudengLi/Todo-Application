@@ -4,15 +4,18 @@ import "reactjs-popup/dist/index.css";
 import Webcam from "react-webcam"; 
 import { addPhoto,deletePhoto,updatePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
 import React from 'react';
-
+import GoogleMap from '../GoogleMap.jsx';
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
   const editButtonRef = useRef(null);
-  const [returnToMain, setReturnToMain] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const DATA = JSON.parse(localStorage.getItem('tasks'))||[];
+  
+
+ 
 
   function handleChange(e) {
     setNewName(e.target.value);
@@ -55,6 +58,7 @@ function Todo(props) {
         <span className="visually-hidden">new name for {props.name}</span>
       </button>
     </div>
+    
   </form>
 );
 
@@ -83,8 +87,53 @@ const handleUpdatePhoto = async (id) => {
     console.error("No file selected.");
   }
 };
-const viewTemplate = (
+const [showPopup, setShowPopup] = useState(false);
+const togglePopup = () => {
+  setShowPopup(!showPopup);
+};
 
+function getCoordinatesById(id) {
+  const foundItem = DATA.find(item => item.id === id);
+  if (foundItem) {
+      return foundItem.location;
+  } else {
+      return "sb";
+  }
+}
+function getCoordinatesById(id) {
+  const foundItem = DATA.find(item => item.id === id);
+  if (foundItem) {
+      return foundItem.location;
+  } else {
+      return "sb";
+  }
+}
+
+const [initialCoordinates, setInitialCoordinates] = useState(null); 
+
+
+useEffect(() => {
+  // 调用getCoordinatesById方法获取坐标
+  const fetchCoordinates = () => {
+    const id = props.id; 
+    const coordinates = getCoordinatesById(id);
+
+    if (coordinates !== "sb") {
+      const latitude = parseFloat(coordinates.latitude);
+      const longitude = parseFloat(coordinates.longitude);
+
+      // 如果成功获取到坐标，则更新initialCoordinates
+      setInitialCoordinates({ latitude, longitude });
+      console.log(coordinates);
+    }
+  };
+
+  fetchCoordinates();
+}, [props.id]);
+
+
+const viewTemplate = (
+ 
   
   <div className="stack-small">
   <div className="c-cb">
@@ -95,11 +144,22 @@ const viewTemplate = (
   onChange={() => props.toggleTaskCompleted(props.id)}
   />
   <label className="todo-label" htmlFor={props.id}>
-  {props.name}
 
-  <a href={props.location.mapURL}>(map)</a>
-  &nbsp; | &nbsp;
-  <a href={props.location.smsURL}>(sms)</a>
+
+  <div className="App">
+  {props.name} &nbsp;&nbsp; <a href={props.location.smsURL}>(sms)&nbsp;&nbsp;</a>
+  <Popup
+        trigger={<button onClick={togglePopup}>(map)</button>}
+        modal
+        open={showPopup}
+        onClose={togglePopup}
+      >
+        <div>
+        <GoogleMap initialCoordinates={initialCoordinates} />
+        </div>
+      </Popup>
+    </div>
+ 
  
   </label>
   </div>
@@ -185,7 +245,6 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
     });
     console.log("WebCamCapture", props.id);
    
-  
     const capture = useCallback( (id) => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
@@ -217,7 +276,12 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
     return (
     <>
     {!imgSrc && (
-    <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
+     <Webcam 
+      audio={false} 
+     ref={webcamRef} 
+    screenshotFormat="image/jpeg" 
+  style={{ maxWidth: '150%', height: 'auto' }} // 控制大小
+     />
     )}
     {imgSrc && <img src={imgSrc} />}
     <div className="btn-group">
@@ -281,6 +345,7 @@ const WebcamCapture = ({ imgSrc, setImgSrc, ...props }) => {
         <div style={{ margin: 'auto' }}>
           <p>Photo not found</p>
         </div>
+        
       );
     }else{ return (
       <div className="photo-container">

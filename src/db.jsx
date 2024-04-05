@@ -4,7 +4,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 // create dexie
 export const db = new Dexie("todo-photos");
 db.version(1).stores({
-  photos: "id",
+  tasks: 'id, name, completed, location.latitude, location.longitude, location.error',
 });
 
 // add photo
@@ -65,6 +65,16 @@ function GetPhotoSrc(id) {
   }
 }
 
+async function getCoordinatesById(id) {
+  const foundItem = DATA.find(item => item.id === id);
+  if (foundItem) {
+      return foundItem.location;
+  } else {
+      return "sb";
+  }
+}
 
 
-export { addPhoto, deletePhoto, updatePhoto,getPhotoSrcFromDB, GetPhotoSrc };
+
+
+export { addPhoto, deletePhoto, updatePhoto,getPhotoSrcFromDB, GetPhotoSrc ,getCoordinatesById};
