@@ -5,7 +5,7 @@ import Webcam from "react-webcam";
 import { addPhoto,deletePhoto,updatePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
 import React from 'react';
 import GoogleMap from '../GoogleMap.jsx';
-
+import { sendSMS } from './service/vonageService';
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
@@ -129,7 +129,14 @@ const refreshPage = () => {
   window.location.reload();
 };
 
-
+const handleSendSMS = async () => {
+  try {
+      const response = await sendSMS('Vonage APIs', '447827060226', 'A text message sent using the Vonage SMS API');
+      console.log('SMS sent successfully:', response);
+  } catch (error) {
+      console.error('Error sending SMS:', error);
+  }
+};
 
 const viewTemplate = (
  
@@ -147,7 +154,10 @@ const viewTemplate = (
 
   <div className="App">
   <div style={{ display: 'flex', alignItems: 'center' }}>
-  {props.name} &nbsp;&nbsp;
+  {props.name} 
+  &nbsp;&nbsp;
+  <button onClick={handleSendSMS}>SMS</button> 
+  &nbsp;&nbsp;&nbsp;
   <button onClick={refreshPage} style={{backgroundImage: 'url("images/refresh.png")', backgroundSize: 'cover', width: '30px', height: '30px'}}></button>
   &nbsp;&nbsp;&nbsp;
   <Popup
