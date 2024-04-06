@@ -5,7 +5,7 @@ import Webcam from "react-webcam";
 import { addPhoto,deletePhoto,updatePhoto, GetPhotoSrc,getPhotoSrcFromDB } from "../db.jsx"; 
 import React from 'react';
 import GoogleMap from '../GoogleMap.jsx';
-import { sendSMS } from './service/vonageService';
+import SMSSender from './sms.jsx';
 
 function Todo(props) {
   const [isEditing, setEditing] = useState(false);
@@ -107,7 +107,7 @@ const [initialCoordinates, setInitialCoordinates] = useState(null);
 
 
 useEffect(() => {
-  // 调用getCoordinatesById方法获取坐标
+  // get lal long
   const fetchCoordinates = () => {
     const id = props.id; 
     const coordinates = getCoordinatesById(id);
@@ -116,7 +116,7 @@ useEffect(() => {
       const latitude = parseFloat(coordinates.latitude);
       const longitude = parseFloat(coordinates.longitude);
 
-      // 如果成功获取到坐标，则更新initialCoordinates
+      // set initialCoordinates with the fetched value
       setInitialCoordinates({ latitude, longitude });
       console.log(coordinates);
     }
@@ -129,14 +129,8 @@ const refreshPage = () => {
   window.location.reload();
 };
 
-const handleSendSMS = async () => {
-  try {
-      const response = await sendSMS('Vonage APIs', '447827060226', 'A text message sent using the Vonage SMS API');
-      console.log('SMS sent successfully:', response);
-  } catch (error) {
-      console.error('Error sending SMS:', error);
-  }
-};
+
+
 
 const viewTemplate = (
  
@@ -154,9 +148,8 @@ const viewTemplate = (
 
   <div className="App">
   <div style={{ display: 'flex', alignItems: 'center' }}>
-  {props.name} 
-  &nbsp;&nbsp;
-  <button onClick={handleSendSMS}>SMS</button> 
+  {props.name}&nbsp;&nbsp;
+  <SMSSender initialCoordinates={initialCoordinates} />
   &nbsp;&nbsp;&nbsp;
   <button onClick={refreshPage} style={{backgroundImage: 'url("images/refresh.png")', backgroundSize: 'cover', width: '30px', height: '30px'}}></button>
   &nbsp;&nbsp;&nbsp;
@@ -175,7 +168,12 @@ const viewTemplate = (
             <GoogleMap initialCoordinates={initialCoordinates} />
           )}
         </div>
-      </Popup>
+      </Popup> &nbsp;&nbsp;&nbsp;
+      {imgSrc ? (
+      <button onClick={() => handleUpdatePhoto(props.id)} 
+      style={{backgroundImage: 'url("images/upload.png")', 
+      backgroundSize: 'cover', width: '30px', height: '30px',float:"right"}}>
+      </button> ) : null}
 </div>
        
     </div>
@@ -236,8 +234,11 @@ const viewTemplate = (
   <div>
   {imgSrc ? (
     <React.Fragment>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={() => handleUpdatePhoto(props.id)}>Update Photo</button>
+     <label htmlFor="fileInput" style={{ backgroundImage: 'url("images/file.png")', 
+     backgroundSize: 'cover', width: '30px', height: '30px', display: 'inline-block', cursor: 'pointer' }}>
+</label>
+<input id="fileInput" type="file" onChange={handleFileChange} style={{ display: 'none' }} />
+    
     </React.Fragment>
   ) : null}
 </div>

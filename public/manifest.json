@@ -18,13 +18,28 @@
       {
         "src": "images/map.png",
         "sizes": "10x10",
-        "type": "image/png",
+        "type": "map/png",
         "purpose": "any"
       },
       {
-        "src": "images/map.png",
+        "src": "images/refresh.png",
         "sizes": "10x10",
         "type": "refresh/png",
+        "purpose": "any"
+      },{
+        "src": "images/sms.png",
+        "sizes": "10x10",
+        "type": "sms/png",
+        "purpose": "any"
+      },{
+        "src": "images/upload.png",
+        "sizes": "10x10",
+        "type": "refresh/png",
+        "purpose": "any"
+      },{
+        "src": "images/file.png",
+        "sizes": "10x10",
+        "type": "file/png",
         "purpose": "any"
       },
       {
