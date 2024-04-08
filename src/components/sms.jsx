@@ -60,7 +60,6 @@ const SMSSender = ({ initialCoordinates }) => {
   };
 
   return (
-    
     <button onClick={handleSendSMS} style={{backgroundImage: 'url("images/sms.png")', backgroundSize: 'cover', width: '30px', height: '30px'}}></button> 
   );
 };
