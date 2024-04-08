@@ -15,7 +15,7 @@ const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 function App(props) {
   const listHeadingRef = useRef(null);
-
+  const [title, setTitle] = useState("Geo TodoMatic");
   const geoFindMe = () => {
     if (!navigator.geolocation) {
     console.log("Geolocation is not supported by your browser");
@@ -176,9 +176,21 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     setShowJoke(false);
 }
 
+
+
+const handleClick = () => {
+  if (title === "Geo TodoMatic") {
+    setTitle("World DestroyMachine");
+  } else {
+    setTitle("Geo TodoMatic");
+  }
+};
+
   return (
     <div className="todoapp stack-large">
-    <h1>Geo TodoMatic</h1>
+   <h1 onClick={handleClick}>
+      {title}
+    </h1>
     <Form addTask={addTask} geoFindMe={geoFindMe} />{" "}
     <div className="filters btn-group stack-exception">{filterList}</div>
     <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
@@ -191,7 +203,11 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
     >
     {taskList}
     </ul>
-    <div><button id="fetchJokeButton" onClick={fetchJoke}>feel boring?</button>
+    {title === "World DestroyMachine" && (<div>
+  <button id="fetchJokeButton" onClick={fetchJoke}>
+    world reset
+  </button>
+
     &nbsp;&nbsp;
     
             {showJoke && (
@@ -202,7 +218,7 @@ const [tasks, setTasks] = usePersistedState("tasks", []);
                 </div>
                 
             )}
-        </div>
+        </div>)}
     </div>
     
    );

@@ -66,7 +66,13 @@ const GoogleMap = ({ initialCoordinates }) => {
   return (
     <div>
       <div id="map" style={{ width: '100%', height: '400px' }}></div>
-      {location && <p>location：{location}</p>}
+      {location &&
+      <div><p>location：{location}</p>
+      <p>posotion:{coordinates.latitude},{coordinates.longitude}</p>
+      </div> 
+      
+      
+      }
       {weather && (
         <div>
           <p>weather：{weather.weather[0].description}</p>
